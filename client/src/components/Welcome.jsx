@@ -9,26 +9,31 @@ import { useContext } from "react";
 const commonStyles =
   "min-h-[70px] sm:px-0 px-2 sm:min-w-[120px] flex justify-center items-center border-[0.5px] border-gray-400 text-white";
 
-const Input = ({ placeholder ,type, value }) => (
-  <input
-    placeholder={placeholder}
-    type={type}
-    step="0.0001"
-    value={value}
-    className="my-2 w-full rounded-sm p-2 outline-none bg-transparent text-white border-none text-sm white-glassmorphism"
-  />
-);
+  const Input = ({ placeholder, name, type, value, handleChange }) => (
+    <input
+      placeholder={placeholder}
+      type={type}
+      step="0.0001"
+      value={value}
+      onChange={(e) => handleChange(e, name)}
+      className="my-2 w-full rounded-sm p-2 outline-none bg-transparent text-white border-none text-sm white-glassmorphism"
+    />
+  );
 
 const Welcome = () => {
-  const {value} = useContext(TransactionContext);
-  console.log(value);
+  const { connectWallet , currentAccount, formData , sendTransaction , handleChange } = useContext(TransactionContext);
+  // console.log(value);
 
 
-  const connectWallet = () => {};
+  const handleSubmit = (e) => {
+    const { addressTo, amount, keyword, message } = formData;
 
-  const handleSubmit = () => {
+    e.preventDefault();
 
-  }
+    if (!addressTo || !amount || !keyword || !message) return;
+
+    sendTransaction();
+  };
 
   return (
     <div className="flex w-full justify-center items-center">
@@ -41,19 +46,19 @@ const Welcome = () => {
             Explore the crypto world. Buy and sell cryptocurrencies easily on
             Big Metaverse
           </p>
-          <button
+          {!currentAccount && (<button
             type="button"
             onClick={connectWallet}
             className="flex flex-row justify-center items-center my-5 bg-[#2952e3] p-3 rounded-full cursor-pointer hover:bg-[#2546bd]"
           >
             <p className="text-white text-base font-semibold">Connect Wallet</p>
-          </button>
+          </button>)}
 
           <div className="grid sm:grid-cols-3 grid-cols-2 w-full mt-10 ">
             <div className={`rounded-tl-2xl ${commonStyles}`}>Realibility</div>
             <div className={commonStyles}>Security</div>
-            <div className={`rounded-tr-2xl ${commonStyles}`}>Ethereum</div>
-            <div className={`rounded-bl-2xl ${commonStyles}`}>Web 3.0</div>
+            <div className={`rounded ${commonStyles}`}>Ethereum</div>
+            <div className={`rounded ${commonStyles}`}>Web 3.0</div>
             <div className={commonStyles}>Low fees</div>
             <div className={`rounded-br-2xl ${commonStyles}`}>Blockchain</div>
           </div>
@@ -76,45 +81,13 @@ const Welcome = () => {
           </div>
 
           <div className="p-5 sm:w-96 w-full flex flex-col justify-start items-center blue-glassmorphism">
-            <Input
-              placeholder="Address To"
-              name="addressTo"
-              type="text"
-              onChange={event => {
-                event.preventDefault();
-                onChange(event.target.value);
-            }}
-            />
-            <Input
-              placeholder="Amount (ETH)"
-              name="amount"
-              type="number"
-              onChange={event => {
-                event.preventDefault();
-                onChange(event.target.value);
-            }}
-            />
-            <Input
-              placeholder="Keyword (Gif)"
-              name="keyword"
-              type="text"
-              onChange={event => {
-                event.preventDefault();
-                onChange(event.target.value);
-            }}
-            />
-            <Input
-              placeholder="Enter Message"
-              name="message"
-              type="text"
-              onChange={event => {
-                event.preventDefault();
-                onChange(event.target.value);
-            }}
-            />
+          <Input placeholder="Address To" name="addressTo" type="text" handleChange={handleChange} />
+            <Input placeholder="Amount (ETH)" name="amount" type="number" handleChange={handleChange} />
+            <Input placeholder="Keyword (Gif)" name="keyword" type="text" handleChange={handleChange} />
+            <Input placeholder="Enter Message" name="message" type="text" handleChange={handleChange} />
 
             <div className="h-[1px] w-full bg-gray-400 my-2 "/>
-            {true ? (
+            {false ? (
                 <Loader/>
             ) : (
               <button
