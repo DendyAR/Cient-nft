@@ -11,3 +11,4 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     </TransactionsProvider>
   </React.StrictMode>
 )
+
